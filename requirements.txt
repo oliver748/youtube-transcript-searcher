@@ -1,0 +1,4 @@
+urllib3
+scrapetube
+youtube_transcript_api
+datetime
