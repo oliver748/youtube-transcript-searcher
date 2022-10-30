@@ -1,6 +1,6 @@
 import urllib.request, scrapetube
 from bs4 import BeautifulSoup
-from utils import clear, setup, title, format_string
+from utilities.utils import clear, setup, title, format_string
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled
 
 
