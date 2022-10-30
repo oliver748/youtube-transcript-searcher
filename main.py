@@ -1,7 +1,21 @@
 import urllib.request, scrapetube
 from bs4 import BeautifulSoup
-from utilities.utils import clear, setup, title, format_string
-from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled
+from utilities.utils import clear, setup, title, formatter
+from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
+
+
+"""
+TODO:
+add case sensitive option - makes for a wider range of options
+add output.txt - so if it crashes, data is still saved
+make more readable and cleaner
+make every line <80 characters w/ spaces included
+threading - makes it much faster
+? config file instead of input
+? searching for a number also searches for the number in letters
+-
+question mark means not sure
+"""
 
 
 def channel_identifier(file):
@@ -50,24 +64,26 @@ def fetch_instances(videos_list):
     """
     DEVIATION = 2 # changes how much is subtracted so it matches - in secs
     instances_found = []
-    for video_id in videos_list:
+    for index, video_id in enumerate(videos_list):
         clear()
 
-        for msg in instances_found:
+        vl_len = len(videos_list)
+        for msg in instances_found: 
             print(f'{msg}')
-        print('---\n\nSearching for instances of specific content from selected channels')
-        print(f'Current video: {video_id}\nTotal videos: {len(videos_list)}')
+        print('---\n')
+        print('Searching for instances of specific content from selected channels')
+        print(f'Current video: {video_id}\nVideos left: {vl_len-index}')
 
         try: # statement used since no subtitles for a video crashes everything
             get_transcript = YouTubeTranscriptApi.get_transcript(video_id)
             transcript_split = str(get_transcript).split(", {")
             for transcript in transcript_split:
                 for content in content_search:
-                    if content in transcript:
-                        s, t = format_string(string=transcript, detour=DEVIATION)
-                        msg = f"Text: {s}\nTimecode: {t}\nVideo ID: {video_id}\n"
+                    if content in transcript.lower():
+                        s, t = formatter(string=transcript, detour=DEVIATION)
+                        msg = f"Text: {s}\nTimecode: {t}\nID: {video_id}\n"
                         instances_found.append(msg)
-        except TranscriptsDisabled:
+        except TranscriptsDisabled or NoTranscriptFound:
             pass
 
         print('\n---\n\nDone!')
