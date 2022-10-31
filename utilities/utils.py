@@ -23,6 +23,9 @@ def formatter(string, detour):
     
     return subtitle_string, timecode
 
+def output_result(string, file_name):
+    with open(file_name, "a") as output:
+        output.write(f"{string}\n")
 
 def setup(): 
     """
@@ -30,6 +33,8 @@ def setup():
     make this in the start instead of changing it in the future; gives a
     much better structure aswell
     """
-    channel_ids = input("File name where all channel ids are (.txt): ")
+    print("Note: Leave output file name blank if you don't wanna output results\n")
+    channel_ids = input("File name where all channels are (.txt): ")
     content_search = input("Content to search for (delimiter=comma): ").lower()
-    return channel_ids, content_search.split(',')
+    output_file = input("File name to output results (.txt): ")
+    return channel_ids, content_search.split(','), output_file

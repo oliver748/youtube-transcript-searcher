@@ -1,21 +1,7 @@
 import urllib.request, scrapetube
 from bs4 import BeautifulSoup
-from utilities.utils import clear, setup, title, formatter
+from utilities.utils import clear, setup, title, formatter, output_result
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
-
-
-"""
-TODO:
-add case sensitive option - makes for a wider range of options
-add output.txt - so if it crashes, data is still saved
-make more readable and cleaner
-make every line <80 characters w/ spaces included
-threading - makes it much faster
-? config file instead of input
-? searching for a number also searches for the number in letters
--
-question mark means not sure
-"""
 
 
 def channel_identifier(file):
@@ -71,7 +57,7 @@ def fetch_instances(videos_list):
         for msg in instances_found: 
             print(f'{msg}')
         print('---\n')
-        print('Searching for instances of specific content from selected channels')
+        print('Searching for instances from selected channels')
         print(f'Current video: {video_id}\nVideos left: {vl_len-index}')
 
         try: # statement used since no subtitles for a video crashes everything
@@ -81,8 +67,11 @@ def fetch_instances(videos_list):
                 for content in content_search:
                     if content in transcript.lower():
                         s, t = formatter(string=transcript, detour=DEVIATION)
-                        msg = f"Text: {s}\nTimecode: {t}\nID: {video_id}\n"
+                        yt_link = f"https://www.youtube.com/watch?v={video_id}"
+                        msg = f"Text: {s}\nTimecode: {t}\nID: {yt_link}\n"
                         instances_found.append(msg)
+                        if output_file: # outputs file to file if user wants it
+                            output_result(msg, output_file)
         except TranscriptsDisabled or NoTranscriptFound:
             pass
 
@@ -92,7 +81,7 @@ def fetch_instances(videos_list):
 if __name__ == "__main__":
     clear()
     title("YouTube Transcript Searcher - github.com/oliver748")
-    channel_ids, content_search = setup()
+    channel_ids, content_search, output_file = setup()
     channels = channel_identifier(channel_ids)
     videos_list = fetch_videos(channels)
     fetch_instances(videos_list)
