@@ -1,10 +1,10 @@
 # What does it do?
 
-Finds specific sentences or words said in YouTube videos using scrapetube, youtube_transcript_api, and YouTubes own automatic subtitle generator.
+Finds specific sentences or words said in YouTube videos using scrapetube, youtube_transcript_api, and YouTube's own automatic subtitle generator.
 
 # How does it work?
 
-This works by first scraping all the youtube links from the channels the user has inputted themself, and then scraping the transcript from all of the youtube videos there are available - finally it checks for the specific content said.
+This works by first scraping all the youtube links from the channels the user has inputted themself, and then scraping the transcript from all of the youtube videos there are available - finally it checks for the specific content in all the transcript data available.
 
 # Instructions
 
